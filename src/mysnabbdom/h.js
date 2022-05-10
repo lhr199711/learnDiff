@@ -1,5 +1,6 @@
-import vnode from "./vnode";
+// h渲染函数，主要是创建一个虚拟dom，本质是js对象
 
+import vnode from "./vnode";
 export default function (sel, data, c) {
   if (arguments.length !== 3) {
     throw Error("目前只能传入三个参数");
