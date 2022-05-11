@@ -100,7 +100,11 @@ export default function updateChildren(parentElm, oldCh, newCh) {
     //   newCh[newEndIdx + 1] === null ? null : newCh[newEndIdx + 1].elm;
     for (let i = newStartIdx; i <= newEndIdx; i++) {
       // insertBefore方法可以自动识别null，如果是null就会自动排到队尾，和appendChild一致
-      parentElm.insertBefore(createElement(newCh[i]), oldCh[oldStartIdx].elm);
+      let dom = oldCh[oldStartIdx];
+      if (dom) {
+        dom = oldCh[oldStartIdx].elm;
+      }
+      parentElm.insertBefore(createElement(newCh[i]), dom);
     }
   } else if (oldStartIdx <= oldEndIdx) {
     // 说明oldVnode还有剩余节点没有处理，所以要删除这些节点
