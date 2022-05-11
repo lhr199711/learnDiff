@@ -1,5 +1,6 @@
 import vnode from "./vnode";
 import createElement from "./createElement";
+import patchVnode from "./patchVnode";
 
 export default function (oldVnode, newVnode) {
   // 1.判断oldvnode是真实dom还是虚拟dom
@@ -15,7 +16,8 @@ export default function (oldVnode, newVnode) {
   }
   // 2.判断转换后的oldVnode与newVnode是否是同一个节点，即是否可以复用
   if (oldVnode.sel === newVnode.sel && oldVnode.key === newVnode.key) {
-    console.log("相同节点");
+    // 是相同节点
+    patchVnode(oldVnode, newVnode);
   } else {
     // 不是相同节点，暴力替换
     let newVnodeDom = createElement(newVnode);
