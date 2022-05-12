@@ -29,25 +29,32 @@ export default function updateChildren(parentElm, oldCh, newCh) {
   while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
     // 首先应该不是判断四种命中，而是略过已经加了undefined标记的项
     if (oldStartVnode === null || oldCh[oldStartIdx] === undefined) {
+      console.log("oldStartVnode = oldCh[++oldStartIdx];");
       oldStartVnode = oldCh[++oldStartIdx];
     } else if (oldEndVnode === null || oldCh[oldEndIdx] === undefined) {
+      console.log("oldEndVnode = oldCh[--oldEndIdx];");
       oldEndVnode = oldCh[--oldEndIdx];
     } else if (newStartVnode === null || newCh[newStartIdx] === undefined) {
+      console.log("newStartVnode = newCh[++newStartIdx];");
       newStartVnode = newCh[++newStartIdx];
     } else if (newEndVnode === null || newCh[newEndIdx] === undefined) {
+      console.log("newEndVnode = newCh[--newEndIdx];");
       newEndVnode = newCh[--newEndIdx];
     } else if (checkSameVnode(oldStartVnode, newStartVnode)) {
       // 新前与旧前对比
+      console.log("新前与旧前对比");
       patchVnode(oldStartVnode, newStartVnode);
       oldStartVnode = oldCh[++oldStartIdx];
       newStartVnode = newCh[++newStartIdx];
     } else if (checkSameVnode(oldEndVnode, newEndVnode)) {
       // 新后与旧后对比
+      console.log("新后与旧后对比");
       patchVnode(oldEndVnode, newEndVnode);
       oldEndVnode = oldCh[--oldEndIdx];
       newEndVnode = newCh[--newEndIdx];
     } else if (checkSameVnode(oldStartVnode, newEndVnode)) {
       // 新后与旧前对比
+      console.log("新后与旧前对比");
       patchVnode(oldStartVnode, newEndVnode);
       // insertBefore已经存在的dom节点是移动操作
       parentElm.insertBefore(oldStartVnode.elm, oldEndVnode.elm.nextSibling);
@@ -55,6 +62,7 @@ export default function updateChildren(parentElm, oldCh, newCh) {
       newEndVnode = newCh[--newEndIdx];
     } else if (checkSameVnode(oldEndVnode, newStartVnode)) {
       // 新前与旧后对比
+      console.log("新前与旧后对比");
       patchVnode(oldEndVnode, newStartVnode);
       parentElm.insertBefore(oldEndVnode.elm, oldStartVnode.elm);
       oldEndVnode = oldCh[--oldEndIdx];
@@ -77,14 +85,16 @@ export default function updateChildren(parentElm, oldCh, newCh) {
       if (idxInOld === undefined) {
         // 如果 idxInOld 是 undefined 说明是全新的项，要插入
         // 被加入的项（就是newStartVnode这项)现不是真正的DOM节点
+        console.log("新项需插入");
         parentElm.insertBefore(createElement(newStartVnode), oldStartVnode.elm);
       } else {
         // 说明不是全新的项，要移动
+        console.log("旧项需移动");
         const elmToMove = oldCh[idxInOld];
         patchVnode(elmToMove, newStartVnode);
         // 把这项设置为undefined，表示我已经处理完这项了
         oldCh[idxInOld] = undefined;
-        // 移动，调用insertBefore也可以实现移动。
+        // 移动，调用insertBefore(a,b)也可以实现移动。a插到b之前
         parentElm.insertBefore(elmToMove.elm, oldStartVnode.elm);
       }
       // newStartIdx++;
@@ -94,6 +104,7 @@ export default function updateChildren(parentElm, oldCh, newCh) {
 
   // 循环结束
   if (newStartIdx <= newEndIdx) {
+    console.log("newVndoe还有剩余节点没有处理，所以要添加这些节点");
     // 说明newVndoe还有剩余节点没有处理，所以要添加这些节点
     // // 插入的标杆
     // const before =
@@ -108,6 +119,7 @@ export default function updateChildren(parentElm, oldCh, newCh) {
     }
   } else if (oldStartIdx <= oldEndIdx) {
     // 说明oldVnode还有剩余节点没有处理，所以要删除这些节点
+    console.log("oldVnode还有剩余节点没有处理，所以要删除这些节点");
     for (let i = oldStartIdx; i <= oldEndIdx; i++) {
       if (oldCh[i]) {
         parentElm.removeChild(oldCh[i].elm);
